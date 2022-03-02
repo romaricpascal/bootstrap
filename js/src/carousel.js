@@ -95,7 +95,6 @@ class Carousel extends BaseComponent {
   constructor(element, config) {
     super(element, config)
 
-    this._items = null
     this._interval = null
     this._activeElement = null
     this._isPaused = false
@@ -165,10 +164,7 @@ class Carousel extends BaseComponent {
   }
 
   to(index) {
-    this._activeElement = this._getActive()
-    const activeIndex = this._getItemIndex(this._activeElement)
-
-    if (index > this._items.length - 1 || index < 0) {
+    if (index > this._getItems().length - 1 || index < 0) {
       return
     }
 
@@ -177,6 +173,7 @@ class Carousel extends BaseComponent {
       return
     }
 
+    const activeIndex = this._getItemIndex(this._getActive())
     if (activeIndex === index) {
       this.pause()
       this.cycle()
@@ -187,7 +184,7 @@ class Carousel extends BaseComponent {
       ORDER_NEXT :
       ORDER_PREV
 
-    this._slide(order, this._items[index])
+    this._slide(order, this._getItems()[index])
   }
 
   dispose() {
@@ -267,14 +264,12 @@ class Carousel extends BaseComponent {
   }
 
   _getItemIndex(element) {
-    this._items = SelectorEngine.find(SELECTOR_ITEM, this._element)
-
-    return this._items.indexOf(element)
+    return this._getItems().indexOf(element)
   }
 
   _getItemByOrder(order, activeElement) {
     const isNext = order === ORDER_NEXT
-    return getNextActiveElement(this._items, activeElement, isNext, this._config.wrap)
+    return getNextActiveElement(this._getItems(), activeElement, isNext, this._config.wrap)
   }
 
   _setActiveIndicatorElement(index) {
@@ -390,6 +385,10 @@ class Carousel extends BaseComponent {
 
   _getActive() {
     return SelectorEngine.findOne(SELECTOR_ACTIVE_ITEM, this._element)
+  }
+
+  _getItems() {
+    return SelectorEngine.find(SELECTOR_ITEM, this._element)
   }
 
   _clearInterval() {
