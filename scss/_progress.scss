@@ -9,13 +9,24 @@
 // scss-docs-end progress-keyframes
 
 .progress {
+  // scss-docs-start progress-css-vars
+  --#{$variable-prefix}progress-height: #{$progress-height};
+  @include rfs($progress-font-size, --#{$variable-prefix}progress-font-size);
+  --#{$variable-prefix}progress-bg: #{$progress-bg}; // stylelint-disable-line custom-property-empty-line-before
+  --#{$variable-prefix}progress-border-radius: #{$progress-border-radius};
+  --#{$variable-prefix}progress-box-shadow: #{$progress-box-shadow};
+  --#{$variable-prefix}progress-bar-color: #{$progress-bar-color};
+  --#{$variable-prefix}progress-bar-bg: #{$progress-bar-bg};
+  --#{$variable-prefix}progress-bar-transition: #{$progress-bar-transition};
+  // scss-docs-end progress-css-vars
+
   display: flex;
-  height: $progress-height;
+  height: var(--#{$variable-prefix}progress-height);
   overflow: hidden; // force rounded corners by cropping it
-  @include font-size($progress-font-size);
-  background-color: $progress-bg;
-  @include border-radius($progress-border-radius);
-  @include box-shadow($progress-box-shadow);
+  @include font-size(var(--#{$variable-prefix}progress-font-size));
+  background-color: var(--#{$variable-prefix}progress-bg);
+  @include border-radius(var(--#{$variable-prefix}progress-border-radius));
+  @include box-shadow(var(--#{$variable-prefix}progress-box-shadow));
 }
 
 .progress-bar {
@@ -23,16 +34,16 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  color: $progress-bar-color;
+  color: var(--#{$variable-prefix}progress-bar-color);
   text-align: center;
   white-space: nowrap;
-  background-color: $progress-bar-bg;
-  @include transition($progress-bar-transition);
+  background-color: var(--#{$variable-prefix}progress-bar-bg);
+  @include transition(var(--#{$variable-prefix}progress-bar-transition));
 }
 
 .progress-bar-striped {
   @include gradient-striped();
-  background-size: $progress-height $progress-height;
+  background-size: var(--#{$variable-prefix}progress-height) auto;
 }
 
 @if $enable-transitions {

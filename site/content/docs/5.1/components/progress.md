@@ -129,9 +129,17 @@ The striped gradient can also be animated. Add `.progress-bar-animated` to `.pro
 </div>
 {{< /example >}}
 
-## Sass
+## CSS
 
 ### Variables
+
+<small class="d-inline-flex px-2 py-1 font-monospace text-muted border rounded-3">Added in v5.3.0</small>
+
+As part of Bootstrap's evolving CSS variables approach, progress bars now use local CSS variables on `.progress` for enhanced real-time customization. Values for the CSS variables are set via Sass, so Sass customization is still supported, too.
+
+{{< scss-docs name="progress-css-vars" file="scss/_progress.scss" >}}
+
+### Sass variables
 
 {{< scss-docs name="progress-variables" file="scss/_variables.scss" >}}
 
