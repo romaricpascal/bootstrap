@@ -100,18 +100,40 @@
 
 // Gets the value of a specific option for a given utility
 @function utilities-get-option($utility-name, $option-name) {
-  @return map-get(
-    utilities-get-options($utility-name),
-    $option-name
-  );
+
+  $options: utilities-get-options($utility-name);
+
+  @if ($options) {
+    @return map-get(
+      $options,
+      $option-name
+    );
+  }
+
+  @return null;
 }
 
 // Gets a specific value for the given utility
 @function utilities-get-value($utility-name, $value-name) {
-  @return map-get(
-    utility-get-option($utility-name, values),
-    $value-name
-  );
+
+  $values: utilities-get-option($utility-name, values);
+
+  $type: type-of($values);
+
+  @if ($type == list) {
+    @return if(index($values, $value-name), $value-name, null);
+  }
+
+  @if ($type == map) {
+    @return map-get(
+      $values,
+      $value-name
+    );
+  }
+
+  @return null;
+
+
 }
 
 
