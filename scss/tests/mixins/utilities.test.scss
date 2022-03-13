@@ -276,4 +276,64 @@
       }
     }
   }
+
+  @include describe('utilities-add') {
+    @include it('adds the utility') {
+      @include before;
+
+      @include utilities-add(z-index, (
+        class: z,
+        property: z-index,
+        values: (-1, 0, 1, 2, 3)
+      ));
+
+      @include assert-equal(utilities-get-options(z-index), (
+        class: z,
+        property: z-index,
+        values: (-1, 0, 1, 2, 3)
+      ))
+    }
+
+    @include it('overrides an existing utility') {
+      @include before;
+
+      @include utilities-add('flex', (
+        class: flex,
+        values: auto none
+      ));
+
+      @include assert-equal(utilities-get-options(flex), (
+        class: flex,
+        values: auto none
+      ))
+    }
+  }
+
+  @include describe('utilities-remove') {
+
+    @include it('removes a single utility') {
+      @include before;
+
+      @include utilities-remove(align);
+
+      @include assert-equal(utilities-get-options(align), null);
+    }
+
+    @include it('removes a multiple utility') {
+      @include before;
+
+      @include utilities-remove(align, margin);
+
+      @include assert-equal(utilities-get-options(align), null);
+      @include assert-equal(utilities-get-options(margin), null);
+    }
+
+    @include it('ignores non existing utilities') {
+      @include before;
+
+      @include utilities-remove(unknown, flex, non-existing);
+
+      @include assert-equal(utilities-get-options(flex), null);
+    }
+  }
 }

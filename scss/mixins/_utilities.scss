@@ -210,10 +210,10 @@
 @mixin utilities-add($utility-name, $utility) {
   $utilities: map-merge($utilities,
     ($utility-name: $utility)
-  );
+  ) !global;
 }
 
 // Remove a utility from the utilities map
 @mixin utilities-remove($utility-names...) {
-  $utilities: map-remove($utility, $utility-names);
+  $utilities: map-remove($utilities, $utility-names...) !global;
 }
