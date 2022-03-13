@@ -9,6 +9,11 @@ $utilities: (
     class: align,
     values: baseline top middle bottom text-bottom text-top
   ),
+  "margin": (
+    property: margin,
+    class: margin,
+    values: auto
+  )
 );
 
 @import '../../mixins/_utilities';
@@ -86,6 +91,22 @@ $utilities: (
       @include it('Returns null if the value is not in the list') {
         @include assert-equal(
           utilities-get-value(align, non-existing),
+          null
+        )
+      }
+    }
+
+    @include describe('utilities with single value') {
+      @include it('Returns the value if it is the one set') {
+        @include assert-equal(
+          utilities-get-value(margin, auto),
+          auto
+        )
+      }
+
+      @include it('Returns null if it is not the value set') {
+        @include assert-equal(
+          utilities-get-value(margin, non-existing),
           null
         )
       }

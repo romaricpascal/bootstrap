@@ -120,15 +120,19 @@
 
   $type: type-of($values);
 
-  @if ($type == list) {
-    @return if(index($values, $value-name), $value-name, null);
-  }
-
   @if ($type == map) {
     @return map-get(
       $values,
       $value-name
     );
+  }
+
+  @if ($type == list) {
+    @return if(index($values, $value-name), $value-name, null);
+  }
+
+  @if ($type == string) {
+    @return if($values == $value-name, $value-name, null);
   }
 
   @return null;
