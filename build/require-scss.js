@@ -1,10 +1,11 @@
+'use strict'
+
 /* eslint-env node */
 
-const path = require('path');
+const path = require('path')
 
 require.extensions['.scss'] = function (module, filename) {
-
-  const sassTruePath = path.relative(path.dirname(filename), process.cwd()) + '/node_modules/sass-true';
+  const sassTruePath = path.relative(path.dirname(filename), process.cwd()) + '/node_modules/sass-true'
 
   return module._compile(`
 var sassTrue = require('sass-true');
