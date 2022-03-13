@@ -113,31 +113,39 @@
   @return null;
 }
 
+// Returns a map of the values for the utility
+@function utilities-get-values($utility-name) {
+  $values: utilities-get-option($utility-name, values);
+
+  @if(type-of($values) != map) {
+    @return map-from($values);
+  }
+
+  @return $values
+}
+
+@function map-from($list-or-string) {
+  $map: ();
+
+  @each $item in $list-or-string {
+    $map: map-merge(
+      $map,
+      ($item: $item)
+    )
+  }
+
+  @return $map;
+}
+
 // Gets a specific value for the given utility
 @function utilities-get-value($utility-name, $value-name) {
 
-  $values: utilities-get-option($utility-name, values);
+  $values: utilities-get-values($utility-name);
 
-  $type: type-of($values);
-
-  @if ($type == map) {
-    @return map-get(
-      $values,
-      $value-name
-    );
-  }
-
-  @if ($type == list) {
-    @return if(index($values, $value-name), $value-name, null);
-  }
-
-  @if ($type == string) {
-    @return if($values == $value-name, $value-name, null);
-  }
-
-  @return null;
-
-
+  @return map-get(
+    $values,
+    $value-name
+  );
 }
 
 
@@ -176,11 +184,7 @@
 // for the `values` option
 @mixin utilities-add-values($utility-name, $values) {
 
-  $existing-values: utilities-get-option($utility-name, values);
-
-  @if(type-of($existing-values) != map) {
-    $existing-values: map-from($existing-values)
-  }
+  $existing-values: utilities-get-values($utility-name);
 
   @include utilities-set-option(
     $utility-name,
@@ -192,25 +196,12 @@
   )
 }
 
-@function map-from($list-or-string) {
-  $map: ();
-
-  @each $item in $list-or-string {
-    $map: map-merge(
-      $map,
-      ($item: $item)
-    )
-  }
-
-  @return $map;
-}
-
 // Remove specific values from a given utility
 @mixin utilities-remove-values($utility-name, $value-names...) {
 
-  $values: utilities-get-option($utility-name, values);
+  $values: utilities-get-values($utility-name);
 
-  $updated-values: map-remove($values, $value-names);
+  $updated-values: map-remove($values, $value-names...);
 
   @include utilities-set-option($utility-name, values, $updated-values);
 }

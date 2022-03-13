@@ -221,4 +221,59 @@
       }
     };
   }
+
+  @include describe('utilities-remove-values') {
+    @include describe('utilities with map of values') {
+      @include it('removes the value with the given key') {
+        @include before;
+
+        @include utilities-remove-values(flex, fill);
+
+        @include assert-equal(utilities-get-option(flex, values),())
+      }
+    }
+    @include describe('utilities with list of values') {
+      @include it('removes the value and creates a map') {
+        @include before;
+
+        @include utilities-remove-values(align, top);
+
+        @include assert-equal(
+          utilities-get-option(align, values),
+          (
+            baseline: baseline
+          )
+        )
+      }
+    }
+    @include describe('utilities with single value') {
+      @include it('removes the value and creates a map') {
+        @include before;
+
+        @include utilities-remove-values(margin, auto);
+
+        @include assert-equal(
+          utilities-get-option(margin, values),
+          ()
+        )
+      }
+    }
+    @include describe('$values...') {
+      @include it('allows to remove multiple values') {
+        @include before;
+
+        @include utilities-remove-values(align, baseline, top);
+
+        @include assert-equal(utilities-get-option(align, values),())
+      }
+
+      @include it('ignores unknown values') {
+        @include before;
+
+        @include utilities-remove-values(flex, unknown, fill, non-existing);
+
+        @include assert-equal(utilities-get-option(flex, values), ());
+      }
+    }
+  }
 }
