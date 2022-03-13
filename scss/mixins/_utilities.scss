@@ -117,11 +117,11 @@
 @function utilities-get-values($utility-name) {
   $values: utilities-get-option($utility-name, values);
 
-  @if(type-of($values) != map) {
+  @if (type-of($values) != map) {
     @return map-from($values);
   }
 
-  @return $values
+  @return $values;
 }
 
 @function map-from($list-or-string) {
@@ -131,7 +131,7 @@
     $map: map-merge(
       $map,
       ($item: $item)
-    )
+    );
   }
 
   @return $map;
@@ -153,22 +153,24 @@
 // To completely replace the existing options, set the 3rd `$merge` parameter to false
 @mixin utilities-set-options($utility-name, $options, $merge: true) {
 
-  @if($merge) {
+  @if ($merge) {
 
     $existing-options: utilities-get-options($utility-name);
 
     // Allow the mixin to create a new utility
     // when setting an unknown utility name
-    $options: if($existing-options,
+    $options: if(
+      $existing-options,
       map-merge(
         utilities-get-options($utility-name),
         $options
       ),
       $options
-    )
+    );
   }
 
-  $utilities: map-merge($utilities,
+  $utilities: map-merge(
+    $utilities,
     ($utility-name: $options)
   ) !global; // !global ensures we modify the global $utilities map
 }
@@ -193,7 +195,7 @@
       $existing-values,
       $values
     )
-  )
+  );
 }
 
 // Remove specific values from a given utility
@@ -208,7 +210,8 @@
 
 // Add a new utility to the utilities map
 @mixin utilities-add($utility-name, $utility) {
-  $utilities: map-merge($utilities,
+  $utilities: map-merge(
+    $utilities,
     ($utility-name: $utility)
   ) !global;
 }
