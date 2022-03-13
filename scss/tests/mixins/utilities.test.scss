@@ -1,20 +1,22 @@
-$utilities: (
-  "flex": (
-    responsive: true,
-    property: flex,
-    values: (fill: 1 1 auto)
-  ),
-  "align": (
-    property: vertical-align,
-    class: align,
-    values: baseline top middle bottom text-bottom text-top
-  ),
-  "margin": (
-    property: margin,
-    class: margin,
-    values: auto
-  )
-);
+@mixin before {
+  $utilities: (
+    "flex": (
+      responsive: true,
+      property: flex,
+      values: (fill: 1 1 auto)
+    ),
+    "align": (
+      property: vertical-align,
+      class: align,
+      values:  baseline top
+    ),
+    "margin": (
+      property: margin,
+      class: margin,
+      values: auto
+    )
+  ) !global;
+}
 
 @import '../../mixins/_utilities';
 
@@ -23,6 +25,7 @@ $utilities: (
   @include describe('utilities-get-options') {
 
     @include it('Returns the options for the given utility') {
+      @include before;
       @include assert-equal(
         utilities-get-options('flex'),
         (
@@ -33,6 +36,7 @@ $utilities: (
     }
 
     @include it('Return null if the utility does not exist') {
+      @include before;
       @include assert-equal(
         utilities-get-options('non-existing'),
         null
@@ -42,6 +46,7 @@ $utilities: (
 
   @include describe('utilities-get-option') {
     @include it('Returns the option for the given utility') {
+      @include before;
       @include assert-equal(
         utilities-get-option(flex, responsive),
         true
@@ -49,6 +54,7 @@ $utilities: (
     }
 
     @include it('Returns null if the option is not present') {
+      @include before;
       @include assert-equal(
         utilities-get-option(flex, non-existing),
         null
@@ -56,6 +62,7 @@ $utilities: (
     }
 
     @include it('Returns null if the utility is not present') {
+      @include before;
       @include assert-equal(
         utilities-get-option(non-existing, responsive),
         null
@@ -66,6 +73,7 @@ $utilities: (
   @include describe('utilities-get-value') {
     @include describe('utilities with map of values') {
       @include it('Returns the value for the given utility') {
+        @include before;
         @include assert-equal(
           utilities-get-value(flex, fill),
           1 1 auto
@@ -73,6 +81,7 @@ $utilities: (
       }
 
       @include it('Returns null if the value does not exist for the utility') {
+        @include before;
         @include assert-equal(
           utilities-get-value(flex, non-existing),
           null
@@ -82,6 +91,7 @@ $utilities: (
 
     @include describe('utilities with list of values') {
       @include it('Returns the value if it is in the list') {
+        @include before;
         @include assert-equal(
           utilities-get-value(align, top),
           top
@@ -89,6 +99,7 @@ $utilities: (
       }
 
       @include it('Returns null if the value is not in the list') {
+        @include before;
         @include assert-equal(
           utilities-get-value(align, non-existing),
           null
@@ -98,6 +109,7 @@ $utilities: (
 
     @include describe('utilities with single value') {
       @include it('Returns the value if it is the one set') {
+        @include before;
         @include assert-equal(
           utilities-get-value(margin, auto),
           auto
@@ -105,6 +117,7 @@ $utilities: (
       }
 
       @include it('Returns null if it is not the value set') {
+        @include before;
         @include assert-equal(
           utilities-get-value(margin, non-existing),
           null
@@ -115,6 +128,8 @@ $utilities: (
 
   @include describe('utilities-set-options') {
     @include it('Merges the options with the existing ones') {
+      @include before;
+
       @include utilities-set-options(flex, (
         responsive: false,
         rtl: true
@@ -150,9 +165,60 @@ $utilities: (
 
   @include describe('utilities-set-option') {
     @include it('sets a specific option for the utility') {
+      @include before;
+
       @include utilities-set-option(flex, responsive, false);
 
       @include assert-equal(utilities-get-option(flex, responsive), false)
     }
+  }
+
+  @include describe('utilities-add-values') {
+    @include describe('utilities with map of values') {
+      @include it('Merges a new map values with the old ones') {
+
+        @include before;
+
+        @include utilities-add-values(flex, (
+          auto: auto,
+          none: none
+        ));
+
+        @include assert-equal(utilities-get-option(flex, values), (
+          fill: 1 1 auto,
+          auto: auto,
+          none: none
+        ));
+      }
+    };
+    @include describe('utilities with list values') {
+      @include it('Creates a map and merges the new values') {
+        @include before;
+
+        @include utilities-add-values(align, (
+          middle: middle
+        ));
+
+        @include assert-equal(utilities-get-option(align, values), (
+          baseline: baseline,
+          top: top,
+          middle: middle
+        ))
+      }
+    }
+    @include describe('utilities with single value') {
+      @include it('Creates a map and merges the new values') {
+        @include before;
+
+        @include utilities-add-values(margin, (
+          5pct: 5%
+        ));
+
+        @include assert-equal(utilities-get-option(margin, values), (
+          auto: auto,
+          5pct: 5%
+        ))
+      }
+    };
   }
 }
