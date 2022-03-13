@@ -91,4 +91,47 @@ $utilities: (
       }
     }
   }
+
+  @include describe('utilities-set-options') {
+    @include it('Merges the options with the existing ones') {
+      @include utilities-set-options(flex, (
+        responsive: false,
+        rtl: true
+      ));
+
+      @include assert-equal(utilities-get-option(flex, responsive), false, 'responsive');
+      @include assert-equal(utilities-get-option(flex, rtl), true, 'rtl');
+    }
+
+    @include it('Creates the options if none exist') {
+
+      @include assert-equal(utilities-get-option(unknown, responsive), null);
+
+      @include utilities-set-options(unknown, (
+        responsive: true
+      ));
+
+      @include assert-equal(utilities-get-option(unknown, responsive), true);
+    };
+
+    @include describe('$merge: false') {
+      @include it('Completely replaces the options') {
+        @include utilities-set-options(flex, (
+          values: auto none
+        ), $merge: false);
+
+        @include assert-equal(utilities-get-options(flex), (
+          values: auto none
+        ))
+      }
+    }
+  }
+
+  @include describe('utilities-set-option') {
+    @include it('sets a specific option for the utility') {
+      @include utilities-set-option(flex, responsive, false);
+
+      @include assert-equal(utilities-get-option(flex, responsive), false)
+    }
+  }
 }

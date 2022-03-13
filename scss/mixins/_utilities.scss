@@ -142,15 +142,23 @@
 @mixin utilities-set-options($utility-name, $options, $merge: true) {
 
   @if($merge) {
-    $options: map-merge(
-      utilities-get-options($utility-name),
+
+    $existing-options: utilities-get-options($utility-name);
+
+    // Allow the mixin to create a new utility
+    // when setting an unknown utility name
+    $options: if($existing-options,
+      map-merge(
+        utilities-get-options($utility-name),
+        $options
+      ),
       $options
     )
   }
 
   $utilities: map-merge($utilities,
-    $utility-name: $options
-  )
+    ($utility-name: $options)
+  ) !global; // !global ensures we modify the global $utilities map
 }
 
 // Set a specific option to a new value for the given utility
