@@ -1,5 +1,94 @@
-@include describe('tests') {
-  @include it('is setup') {
-    @include assert-equal(true, true);
+$utilities: (
+  "flex": (
+    responsive: true,
+    property: flex,
+    values: (fill: 1 1 auto)
+  ),
+  "align": (
+    property: vertical-align,
+    class: align,
+    values: baseline top middle bottom text-bottom text-top
+  ),
+);
+
+@import '../../mixins/_utilities';
+
+@include describe('utilities') {
+
+  @include describe('utilities-get-options') {
+
+    @include it('Returns the options for the given utility') {
+      @include assert-equal(
+        utilities-get-options('flex'),
+        (
+          responsive: true,
+          property: flex,
+          values: (fill: 1 1 auto)
+        ))
+    }
+
+    @include it('Return null if the utility does not exist') {
+      @include assert-equal(
+        utilities-get-options('non-existing'),
+        null
+      )
+    }
+  }
+
+  @include describe('utilities-get-option') {
+    @include it('Returns the option for the given utility') {
+      @include assert-equal(
+        utilities-get-option(flex, responsive),
+        true
+      )
+    }
+
+    @include it('Returns null if the option is not present') {
+      @include assert-equal(
+        utilities-get-option(flex, non-existing),
+        null
+      )
+    }
+
+    @include it('Returns null if the utility is not present') {
+      @include assert-equal(
+        utilities-get-option(non-existing, responsive),
+        null
+      )
+    }
+  }
+
+  @include describe('utilities-get-value') {
+    @include describe('utilities with map of values') {
+      @include it('Returns the value for the given utility') {
+        @include assert-equal(
+          utilities-get-value(flex, fill),
+          1 1 auto
+        )
+      }
+
+      @include it('Returns null if the value does not exist for the utility') {
+        @include assert-equal(
+          utilities-get-value(flex, non-existing),
+          null
+        )
+      }
+    }
+
+    @include describe('utilities with list of values') {
+      @include it('Returns the value if it is in the list') {
+        @include assert-equal(
+          utilities-get-value(align, top),
+          top
+        )
+      }
+
+      @include it('Returns null if the value is not in the list') {
+        @include assert-equal(
+          utilities-get-value(align, non-existing),
+          null
+        )
+      }
+    }
   }
 }
